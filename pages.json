@@ -1,6 +1,18 @@
-
 {
-  "title": "Visual History - Meine Bildanalyse",
-  "subtitle": "Willkommen! Bitte wähle ein Thema aus, um zu starten.",
-  "pages": []
+  "title": "Geschichte – Bildikonen",
+  "subtitle": "Unterseiten auswählen",
+  "pages": [
+    {
+      "title": "Die Freiheit führt das Volk",
+      "description": "Französische Revolution – Bildanalyse",
+      "path": "/freiheit-fuehrt-das-volk/",
+      "tags": ["Revolution", "19. Jh."]
+    },
+    {
+      "title": "Bonaparte beim Überschreiten der Alpen am Großen Sankt Bernhard",
+      "description": "Napoleon – Bildanalyse",
+      "path": "/bonaparte-alpen/",
+      "tags": ["Napoleon", "19. Jh."]
+    }
+  ]
 }
