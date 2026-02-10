@@ -1,31 +1,400 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visual History - Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-        }
-    </style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Geschichte – Bildikonen</title>
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --accent:#4f46e5;
+      --accent2:#0ea5e9;
+      --danger:#ef4444;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(79,70,229,0.10), transparent 60%),
+                  radial-gradient(1200px 800px at 80% 0%, rgba(14,165,233,0.10), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+    }
+    header{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 18px 18px;
+    }
+    .top{
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(24px, 4vw, 38px);
+      letter-spacing:-0.02em;
+    }
+    .sub{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+    .input{
+      background:rgba(255,255,255,0.75);
+      border:1px solid var(--border);
+      border-radius: 999px;
+      padding: 12px 14px;
+      min-width: 260px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.05);
+      backdrop-filter: blur(10px);
+    }
+    .input input{
+      border:none;
+      outline:none;
+      background:transparent;
+      font-size:14px;
+      width:100%;
+    }
+    .pillbar{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .pill{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.8);
+      padding:10px 12px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:800;
+      color:var(--muted);
+      user-select:none;
+      transition: all .15s ease;
+    }
+    .pill.active{
+      border-color: rgba(79,70,229,0.35);
+      background: rgba(79,70,229,0.10);
+      color: var(--accent);
+    }
+    main{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 10px 18px 44px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+    }
+    .card{
+      grid-column: span 12;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display:flex;
+      gap: 14px;
+      align-items: stretch;
+      justify-content:space-between;
+      transition: transform .15s ease, box-shadow .15s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 26px 70px rgba(15, 23, 42, 0.12);
+    }
+    .meta{
+      flex:1;
+      min-width: 0;
+    }
+    .title{
+      margin:0;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing:-0.01em;
+      line-height:1.15;
+    }
+    .desc{
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-weight: 750;
+      line-height:1.35;
+    }
+    .tags{
+      margin-top: 12px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .tag{
+      font-size: 12px;
+      font-weight: 900;
+      color: #0f172a;
+      border:1px solid var(--border);
+      background: rgba(248,250,252,0.9);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+    .go{
+      flex-shrink:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white;
+      text-decoration:none;
+      font-weight: 950;
+      box-shadow: 0 16px 40px rgba(79,70,229,0.25);
+      border: 0;
+      min-width: 140px;
+      cursor:pointer;
+    }
+    .go:active{ transform: translateY(1px); }
+    .status{
+      margin-top: 16px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,0.85);
+      border-radius: var(--radius);
+      padding: 16px;
+      color: var(--muted);
+      font-weight: 800;
+      box-shadow: 0 14px 40px rgba(15,23,42,0.06);
+    }
+    .error{
+      border-color: rgba(239,68,68,0.35);
+      background: rgba(239,68,68,0.06);
+      color: #7f1d1d;
+    }
+    .small{
+      font-size: 12px;
+      opacity: .9;
+      margin-top: 6px;
+    }
+    @media (min-width: 740px){
+      .card{ grid-column: span 6; }
+    }
+    @media (min-width: 1020px){
+      .card{ grid-column: span 4; }
+    }
+    footer{
+      max-width:1100px;
+      margin: 0 auto;
+      padding: 0 18px 40px;
+      color: var(--muted);
+      font-weight: 800;
+      font-size: 12px;
+    }
+    code{background:rgba(15,23,42,0.06); padding:2px 6px; border-radius:8px}
+  </style>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+  <header>
+    <div class="top">
+      <div>
+        <h1 id="siteTitle">Geschichte – Bildikonen</h1>
+        <p class="sub" id="siteSubtitle">Wähle eine Unterseite aus.</p>
+      </div>
+
+      <div class="controls">
+        <div class="input" title="Suche nach Titel oder Beschreibung">
+          <span aria-hidden="true">🔎</span>
+          <input id="search" type="search" placeholder="Suchen…" />
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="pillbar" id="tagBar" aria-label="Tag-Filter"></div>
+    </div>
+
+    <div id="status" class="status" hidden></div>
+  </header>
+
+  <main>
+    <div id="grid" class="grid" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    <div>
+      Quelle: <code>/pages.json</code> im Repo-Root. Wenn hier „Keine Seiten“ steht, prüfe:
+      <code>https://…/pages.json</code> im Browser (muss sichtbar sein).
+    </div>
+  </footer>
+
+<script>
+(async function(){
+  const $ = (id)=>document.getElementById(id);
+  const grid = $("grid");
+  const status = $("status");
+  const siteTitle = $("siteTitle");
+  const siteSubtitle = $("siteSubtitle");
+  const search = $("search");
+  const tagBar = $("tagBar");
+
+  let data = null;
+  let pages = [];
+  let activeTag = "Alle";
+
+  function showStatus(msg, isError=false){
+    status.hidden = false;
+    status.classList.toggle("error", !!isError);
+    status.innerHTML = msg;
+  }
+  function hideStatus(){
+    status.hidden = true;
+    status.classList.remove("error");
+    status.innerHTML = "";
+  }
+
+  function normalize(s){
+    return (s || "").toString().toLowerCase().trim();
+  }
+
+  function buildTagBar(tags){
+    tagBar.innerHTML = "";
+    const all = ["Alle", ...tags];
+    all.forEach(t=>{
+      const b = document.createElement("div");
+      b.className = "pill" + (t===activeTag ? " active" : "");
+      b.textContent = t;
+      b.onclick = ()=>{
+        activeTag = t;
+        buildTagBar(tags);
+        render();
+      };
+      tagBar.appendChild(b);
+    });
+  }
+
+  function render(){
+    const q = normalize(search.value);
+    const filtered = pages.filter(p=>{
+      const inText = normalize(p.title).includes(q) || normalize(p.description).includes(q);
+      const inTag = (activeTag==="Alle") || (Array.isArray(p.tags) && p.tags.includes(activeTag));
+      return inText && inTag;
+    });
+
+    grid.innerHTML = "";
+
+    if(filtered.length === 0){
+      showStatus(
+        "Keine Treffer. Prüfe Suche/Tag-Filter oder ob <code>pages.json</code> Einträge hat.",
+        false
+      );
+      return;
+    } else {
+      hideStatus();
+    }
+
+    filtered.forEach(p=>{
+      const card = document.createElement("div");
+      card.className = "card";
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+
+      const h = document.createElement("h3");
+      h.className = "title";
+      h.textContent = p.title || "Ohne Titel";
+
+      const d = document.createElement("p");
+      d.className = "desc";
+      d.textContent = p.description || "";
+
+      meta.appendChild(h);
+      meta.appendChild(d);
+
+      if(Array.isArray(p.tags) && p.tags.length){
+        const t = document.createElement("div");
+        t.className = "tags";
+        p.tags.slice(0,6).forEach(tag=>{
+          const s = document.createElement("span");
+          s.className = "tag";
+          s.textContent = tag;
+          t.appendChild(s);
+        });
+        meta.appendChild(t);
+      }
+
+      const a = document.createElement("a");
+      a.className = "go";
+      a.href = p.path || "#";
+      a.innerHTML = 'Öffnen <span aria-hidden="true">→</span>';
+
+      card.appendChild(meta);
+      card.appendChild(a);
+
+      grid.appendChild(card);
+    });
+  }
+
+  async function load(){
+    try{
+      // cache-bust, damit Cloudflare/Browser nicht ewig ein altes pages.json nehmen
+      const url = "/pages.json?ts=" + Date.now();
+      const res = await fetch(url, { cache: "no-store" });
+
+      if(!res.ok){
+        throw new Error("HTTP " + res.status + " beim Laden von /pages.json");
+      }
+      data = await res.json();
+
+      // einfache Validierung
+      pages = Array.isArray(data.pages) ? data.pages : [];
+      siteTitle.textContent = data.title || "Geschichte – Bildikonen";
+      siteSubtitle.textContent = data.subtitle || "Wähle eine Unterseite aus.";
+
+      if(!pages.length){
+        showStatus(
+          "Keine Seiten eingetragen. Entweder ist <code>pages.json</code> leer oder hat kein Feld <code>pages</code>.",
+          true
+        );
+        return;
+      }
+
+      // Tags sammeln
+      const tagSet = new Set();
+      pages.forEach(p=>{
+        if(Array.isArray(p.tags)) p.tags.forEach(t=>tagSet.add(t));
+      });
+      buildTagBar([...tagSet].sort((a,b)=>a.localeCompare(b, "de")));
+
+      hideStatus();
+      render();
+    } catch(err){
+      showStatus(
+        "<b>Fehler:</b> " + (err && err.message ? err.message : String(err)) +
+        "<div class='small'>Prüfe, ob <code>pages.json</code> im Repo-Root liegt und unter <code>/pages.json</code> erreichbar ist.</div>",
+        true
+      );
+    }
+  }
+
+  search.addEventListener("input", render);
+  await load();
+})();
+</script>
 </body>
 </html>
