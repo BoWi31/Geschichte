@@ -1,0 +1,5 @@
+{
+  "name": "Lernraum Strukturseite",
+  "description": "Ein schlichtes, schultaugliches Dashboard zur Navigation zwischen verschiedenen Unterseiten, basierend auf einer zentralen JSON-Konfiguration.",
+  "requestFramePermissions": []
+}
